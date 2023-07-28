@@ -1,25 +1,21 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import nowted from "../public/logo.png";
-import {
-  Archive,
-  FileText,
-  Folder,
-  FolderOpen,
-  Plus,
-  Search,
-  Star,
-  Trash,
-} from "lucide-react";
-import { useState } from "react";
+"use client";
+
 import SidebarMenu from "@/components/sidebar-menu";
+import { Button } from "@/components/ui/button";
+import { useNoteStore } from "@/zustand";
 
 export default function Home() {
+  const selectedFolder = useNoteStore((state) => state.data);
   return (
     <main className="flex h-screen">
       <SidebarMenu />
-      <section className="flex items-center justify-around w-1/5 bg-noted-secondary">
-        <Button variant={"secondary"}>Content List</Button>
+      <section className="w-1/5 text-white bg-noted-secondary">
+        <p>{selectedFolder.title}</p>
+        <ul>
+          {selectedFolder.notes.map((item) => (
+            <li key={item.id}>{item.title}</li>
+          ))}
+        </ul>
       </section>
       <section className="flex items-center justify-around w-3/5 bg-noted">
         <Button variant={"secondary"}>Text Editor</Button>

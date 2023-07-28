@@ -1,96 +1,15 @@
 "use client";
 
-import React from "react";
 import { Button } from "@/components/ui/button";
+import { folderList, moreList, recentNotes } from "@/note";
+import { FileText, Folder, FolderOpen, Plus, Search } from "lucide-react";
 import Image from "next/image";
-import nowted from "../public/logo.png";
-import {
-  Archive,
-  FileText,
-  Folder,
-  FolderOpen,
-  Plus,
-  Search,
-  Star,
-  Trash,
-} from "lucide-react";
 import { useState } from "react";
+import nowted from "../public/logo.png";
+import { useNoteStore } from "@/zustand";
 
-type NoteProps = {
-  id: number;
-  title: string;
-  url: string;
-  category: string;
-};
-
-type FolderProps = {
-  icon?: React.ReactNode;
-  title: string;
-  notes: string;
-};
-
-const recentList: NoteProps[] = [
-  {
-    id: 1,
-    title: "Reflection on the Month of June",
-    url: "",
-    category: "",
-  },
-  {
-    id: 2,
-    title: "Project proposal",
-    url: "",
-    category: "",
-  },
-  {
-    id: 3,
-    title: "Travel itinerary",
-    url: "",
-    category: "",
-  },
-];
-
-const folderList: FolderProps[] = [
-  {
-    title: "Personal",
-    notes: "undefined",
-  },
-  {
-    title: "Work",
-    notes: "undefined",
-  },
-  {
-    title: "Travel",
-    notes: "undefined",
-  },
-  {
-    title: "Events",
-    notes: "undefined",
-  },
-  {
-    title: "Finances",
-    notes: "undefined",
-  },
-];
-
-const moreList: FolderProps[] = [
-  {
-    icon: <Star className="w-4 h-4 mr-3" />,
-    title: "Favorite",
-    notes: "undefined",
-  },
-  {
-    icon: <Trash className="w-4 h-4 mr-3" />,
-    title: "Trash",
-    notes: "undefined",
-  },
-  {
-    icon: <Archive className="w-4 h-4 mr-3" />,
-    title: "Archived Notes",
-    notes: "undefined",
-  },
-];
 export default function SidebarMenu() {
+  const selectNote = useNoteStore((state) => state.selectNote);
   const [category, setCategory] = useState("folder");
   const [currentRecentSelected, setCurrentRecentSelected] =
     useState<Number | null>(null);
@@ -112,7 +31,7 @@ export default function SidebarMenu() {
       <div>
         <p className="px-5 pb-2 text-xs text-white/60">Recents</p>
         <ul className="text-sm">
-          {recentList.map((item, index) => (
+          {recentNotes.map((item, index) => (
             <li
               onClick={() => setCurrentRecentSelected(index)}
               aria-current={index === currentRecentSelected}
@@ -141,6 +60,7 @@ export default function SidebarMenu() {
                 } else {
                   setCurrentFolderSelected(index);
                 }
+                selectNote(item);
               }}
               aria-current={index === currentFolderSelected}
               key={item.title}
