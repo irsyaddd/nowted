@@ -1,6 +1,7 @@
 export type NoteProps = {
   id: number;
   title: string;
+  content: string;
   createdAt: string;
   url: string;
   category: string;

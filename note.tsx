@@ -5,6 +5,8 @@ export const recentNotes: NoteProps[] = [
   {
     id: 1,
     title: "Reflection on the Month of June",
+    content:
+      "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
     createdAt: "",
     url: "",
     category: "",
@@ -12,6 +14,8 @@ export const recentNotes: NoteProps[] = [
   {
     id: 2,
     title: "Project proposal",
+    content:
+      "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
     createdAt: "",
     url: "",
     category: "",
@@ -19,6 +23,8 @@ export const recentNotes: NoteProps[] = [
   {
     id: 3,
     title: "Travel itinerary",
+    content:
+      "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
     createdAt: "",
     url: "",
     category: "",
@@ -30,6 +36,8 @@ export const notes: NoteProps[] = [
     id: 1,
     title: "Reflection on the Month of June",
     createdAt: "",
+    content:
+      "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
     url: "",
     category: "",
   },
@@ -37,6 +45,8 @@ export const notes: NoteProps[] = [
     id: 2,
     title: "Project proposal",
     createdAt: "",
+    content:
+      "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
     url: "",
     category: "",
   },
@@ -44,6 +54,8 @@ export const notes: NoteProps[] = [
     id: 3,
     title: "Travel itinerary",
     createdAt: "",
+    content:
+      "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
     url: "",
     category: "",
   },
@@ -51,6 +63,8 @@ export const notes: NoteProps[] = [
     id: 4,
     title: "My Goal for The Next Year",
     createdAt: "",
+    content:
+      "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
     url: "",
     category: "",
   },
@@ -58,6 +72,8 @@ export const notes: NoteProps[] = [
     id: 5,
     title: "August 2023 Daily Expenses",
     createdAt: "",
+    content:
+      "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
     url: "",
     category: "",
   },
@@ -65,6 +81,8 @@ export const notes: NoteProps[] = [
     id: 6,
     title: "My Favorite Recipe",
     createdAt: "",
+    content:
+      "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
     url: "",
     category: "",
   },
@@ -77,14 +95,18 @@ export const folderList: FolderProps[] = [
       {
         id: 4,
         title: "My Goal for The Next Year",
-        createdAt: "",
+        createdAt: "12/12/2022",
+        content:
+          "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
         url: "",
         category: "",
       },
       {
         id: 6,
         title: "My Favorite Recipe",
-        createdAt: "",
+        createdAt: "12/12/2092",
+        content:
+          "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
         url: "",
         category: "",
       },
@@ -96,7 +118,9 @@ export const folderList: FolderProps[] = [
       {
         id: 2,
         title: "Project proposal",
-        createdAt: "",
+        createdAt: "12/99/2022",
+        content:
+          "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
         url: "",
         category: "",
       },
@@ -108,7 +132,9 @@ export const folderList: FolderProps[] = [
       {
         id: 3,
         title: "Travel itinerary",
-        createdAt: "",
+        createdAt: "12/12/2088",
+        content:
+          "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
         url: "",
         category: "",
       },
@@ -120,7 +146,9 @@ export const folderList: FolderProps[] = [
       {
         id: 1,
         title: "Reflection on the Month of June",
-        createdAt: "",
+        createdAt: "12/09/2022",
+        content:
+          "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
         url: "",
         category: "",
       },
@@ -132,7 +160,9 @@ export const folderList: FolderProps[] = [
       {
         id: 5,
         title: "August 2023 Daily Expenses",
-        createdAt: "",
+        createdAt: "88/09/2023",
+        content:
+          "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available",
         url: "",
         category: "",
       },
