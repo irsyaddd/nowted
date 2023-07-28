@@ -98,7 +98,7 @@ export default function SidebarMenu() {
     useState<Number | null>(0);
   const [currentSelected, setCurrentSelected] = useState<Number | null>(null);
   return (
-    <section className="w-1/5 space-y-8 bg-noted">
+    <section className="space-y-8 w-[20rem] bg-noted">
       <div className="px-5 pt-5 space-y-8">
         <div className="flex items-center justify-between w-full">
           <Image alt="Nowted Logo" src={nowted} width={110} height={40} />
