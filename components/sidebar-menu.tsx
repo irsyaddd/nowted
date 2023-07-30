@@ -12,8 +12,6 @@ export default function SidebarMenu() {
   const [category, setCategory] = useState("folder");
   const { selectNote, selectMenu, selectNoteDetail, dataMenu, data } =
     useNoteStore();
-  const [currentRecentSelected, setCurrentRecentSelected] =
-    useState<Number | null>(null);
   const [currentSelected, setCurrentSelected] = useState<Number | null>(null);
   return (
     <section className="space-y-8 w-[20rem] bg-noted">
@@ -33,7 +31,6 @@ export default function SidebarMenu() {
           {recentNotes.map((item, index) => (
             <li
               onClick={() => {
-                setCurrentRecentSelected(index);
                 selectNoteDetail(item);
                 selectNote(item.category);
                 selectMenu(item.category, item.id);
