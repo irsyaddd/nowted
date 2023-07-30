@@ -10,7 +10,8 @@ import nowted from "../public/logo.png";
 
 export default function SidebarMenu() {
   const [category, setCategory] = useState("folder");
-  const { selectNote, selectMenu, selectedMenu, data } = useNoteStore();
+  const { selectNote, selectMenu, selectNoteDetail, dataMenu, data } =
+    useNoteStore();
   const [currentRecentSelected, setCurrentRecentSelected] =
     useState<Number | null>(null);
   const [currentSelected, setCurrentSelected] = useState<Number | null>(null);
@@ -33,10 +34,11 @@ export default function SidebarMenu() {
             <li
               onClick={() => {
                 setCurrentRecentSelected(index);
-                selectNote("item.category");
+                selectNoteDetail(item);
+                selectNote(item.category);
                 selectMenu(item.category, item.id);
               }}
-              aria-current={index === currentRecentSelected}
+              aria-current={index === data.recentSelectedIndex! - 1}
               role="button"
               key={item.id}
               className={
@@ -65,14 +67,14 @@ export default function SidebarMenu() {
                   selectMenu(item.title, data.recentSelectedIndex);
                 }
               }}
-              aria-current={item.title === selectedMenu}
+              aria-current={item.title === dataMenu}
               key={item.title}
               className={`${
                 category === "folder" &&
                 "[&[aria-current='true']]:bg-white/5 [&[aria-current='true']]:text-white"
               } flex items-center px-5 py-3 transition duration-75 cursor-pointer hover:text-white text-white/60 hover:bg-white/5`}
             >
-              {selectedMenu === item.title ? (
+              {dataMenu === item.title ? (
                 <FolderOpen className="w-4 h-4 mr-3" />
               ) : (
                 <Folder className="w-4 h-4 mr-3" />

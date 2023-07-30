@@ -9,13 +9,23 @@ interface NoteState {
     notes: NoteProps[];
     recentSelectedIndex?: number;
   };
-  selectedMenu: string;
+  dataMenu: string;
+  dataNoteDetail: NoteProps;
   selectNote: (params: string | { title: string; notes: NoteProps[] }) => void;
   selectMenu: (title: string, id?: number) => void;
+  selectNoteDetail: (note: NoteProps) => void;
 }
 
 export const useNoteStore = create<NoteState>()((set) => ({
-  selectedMenu: folderList[0].title,
+  dataMenu: folderList[0].title,
+  dataNoteDetail: {
+    id: 0,
+    title: "",
+    content: "",
+    createdAt: "",
+    url: "",
+    category: "",
+  },
   data: {
     title: folderList[0].title,
     notes: folderList[0].notes,
@@ -23,7 +33,7 @@ export const useNoteStore = create<NoteState>()((set) => ({
   },
   selectMenu: (title, id) =>
     set((state) => ({
-      selectedMenu: title,
+      dataMenu: title,
       data: {
         ...state.data,
         recentSelectedIndex: id,
@@ -51,4 +61,5 @@ export const useNoteStore = create<NoteState>()((set) => ({
       set(() => ({ data: params }));
     }
   },
+  selectNoteDetail: (note) => set(() => ({ dataNoteDetail: note })),
 }));
