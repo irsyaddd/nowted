@@ -1,3 +1,4 @@
+"use client";
 import { folderList } from "@/note";
 import { NoteProps } from "@/types";
 import { create } from "zustand";

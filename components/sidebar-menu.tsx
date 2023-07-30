@@ -2,11 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { folderList, moreList, recentNotes } from "@/note";
+import { useNoteStore } from "@/zustand/noteStore";
 import { FileText, Folder, FolderOpen, Plus, Search } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import nowted from "../public/logo.png";
-import { useNoteStore } from "@/zustand";
 
 export default function SidebarMenu() {
   const [category, setCategory] = useState("folder");
@@ -33,7 +33,7 @@ export default function SidebarMenu() {
             <li
               onClick={() => {
                 setCurrentRecentSelected(index);
-                selectNote(item.category);
+                selectNote("item.category");
                 selectMenu(item.category, item.id);
               }}
               aria-current={index === currentRecentSelected}
@@ -53,7 +53,7 @@ export default function SidebarMenu() {
       <div>
         <p className="px-5 pb-2 text-xs text-white/60">Folders</p>
         <ul className="text-sm">
-          {folderList.map((item, index) => (
+          {folderList.map((item) => (
             <li
               onClick={() => {
                 if (category !== "folder") {
