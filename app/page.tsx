@@ -1,5 +1,6 @@
 "use client";
 import ContentList from "@/components/content-list";
+import EmptyState from "@/components/empty-state";
 import SidebarMenu from "@/components/sidebar-menu";
 import { useNoteStore } from "@/zustand/noteStore";
 
@@ -10,7 +11,11 @@ export default function Home() {
       <SidebarMenu />
       <ContentList />
       <section className="flex items-center justify-around px-5 grow bg-noted">
-        <p className="text-white">{dataNoteDetail.title}</p>
+        {dataNoteDetail ? (
+          <p className="text-white">{dataNoteDetail.title}</p>
+        ) : (
+          <EmptyState />
+        )}
       </section>
     </main>
   );

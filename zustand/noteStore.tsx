@@ -10,7 +10,7 @@ interface NoteState {
     recentSelectedIndex?: number;
   };
   dataMenu: string;
-  dataNoteDetail: NoteProps;
+  dataNoteDetail: NoteProps | undefined;
   selectNote: (params: string | { title: string; notes: NoteProps[] }) => void;
   selectMenu: (title: string, id?: number) => void;
   selectNoteDetail: (note: NoteProps) => void;
@@ -18,14 +18,7 @@ interface NoteState {
 
 export const useNoteStore = create<NoteState>()((set) => ({
   dataMenu: folderList[0].title,
-  dataNoteDetail: {
-    id: 0,
-    title: "",
-    content: "",
-    createdAt: "",
-    url: "",
-    category: "",
-  },
+  dataNoteDetail: undefined,
   data: {
     title: folderList[0].title,
     notes: folderList[0].notes,
