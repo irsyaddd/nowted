@@ -4,21 +4,19 @@ import { Button } from "@/components/ui/button";
 import { folderList, moreList, recentNotes } from "@/note";
 import { FileText, Folder, FolderOpen, Plus, Search } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import nowted from "../public/logo.png";
 import { useNoteStore } from "@/zustand";
 
 export default function SidebarMenu() {
-  const selectNote = useNoteStore((state) => state.selectNote);
   const [category, setCategory] = useState("folder");
+  const { selectNote, selectMenu, selectedMenu, data } = useNoteStore();
   const [currentRecentSelected, setCurrentRecentSelected] =
     useState<Number | null>(null);
-  const [currentFolderSelected, setCurrentFolderSelected] =
-    useState<Number | null>(0);
   const [currentSelected, setCurrentSelected] = useState<Number | null>(null);
   return (
     <section className="space-y-8 w-[20rem] bg-noted">
-      <div className="px-5 pt-5 space-y-8">
+      <div className="px-5 pt-8 space-y-8">
         <div className="flex items-center justify-between w-full">
           <Image alt="Nowted Logo" src={nowted} width={110} height={40} />
           <Search className="w-4 h-4 text-white" />
@@ -33,7 +31,11 @@ export default function SidebarMenu() {
         <ul className="text-sm">
           {recentNotes.map((item, index) => (
             <li
-              onClick={() => setCurrentRecentSelected(index)}
+              onClick={() => {
+                setCurrentRecentSelected(index);
+                selectNote(item.category);
+                selectMenu(item.category, item.id);
+              }}
               aria-current={index === currentRecentSelected}
               role="button"
               key={item.id}
@@ -56,20 +58,21 @@ export default function SidebarMenu() {
               onClick={() => {
                 if (category !== "folder") {
                   setCategory("folder");
-                  setCurrentFolderSelected(index);
+                  selectNote(item);
+                  selectMenu(item.title, data.recentSelectedIndex);
                 } else {
-                  setCurrentFolderSelected(index);
+                  selectNote(item);
+                  selectMenu(item.title, data.recentSelectedIndex);
                 }
-                selectNote(item);
               }}
-              aria-current={index === currentFolderSelected}
+              aria-current={item.title === selectedMenu}
               key={item.title}
               className={`${
                 category === "folder" &&
                 "[&[aria-current='true']]:bg-white/5 [&[aria-current='true']]:text-white"
               } flex items-center px-5 py-3 transition duration-75 cursor-pointer hover:text-white text-white/60 hover:bg-white/5`}
             >
-              {currentFolderSelected === index ? (
+              {selectedMenu === item.title ? (
                 <FolderOpen className="w-4 h-4 mr-3" />
               ) : (
                 <Folder className="w-4 h-4 mr-3" />
