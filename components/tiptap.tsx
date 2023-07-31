@@ -1,13 +1,17 @@
 "use client";
 
-import React from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { NoteProps } from "@/types";
+import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
-export default function Tiptap() {
+export default function Tiptap(data: NoteProps) {
   const editor = useEditor({
     extensions: [StarterKit],
-    content: "<p>Hello World! 🌎️</p>",
+    content: `${data.content}`,
   });
-  return <EditorContent editor={editor} className="text-white" />;
+  return (
+    <div>
+      <EditorContent editor={editor} className="focus:ring-red-400" />
+    </div>
+  );
 }

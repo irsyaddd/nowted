@@ -33,10 +33,7 @@ export default function SidebarMenu() {
           <Image alt="Nowted Logo" src={nowted} width={110} height={40} />
           <Search className="w-5 h-5 text-white" />
         </div>
-        <Button
-          variant={"secondary"}
-          className="w-full text-white bg-white/5 hover:bg-white/[0.03] shadow-lg"
-        >
+        <Button variant={"secondary"} className="w-full shadow-lg">
           <Plus className="w-5 h-5 mr-2" />
           New Note
         </Button>
