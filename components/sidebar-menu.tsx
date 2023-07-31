@@ -3,7 +3,20 @@
 import { Button } from "@/components/ui/button";
 import { folderList, moreList, recentNotes } from "@/note";
 import { useNoteStore } from "@/zustand/noteStore";
-import { FileText, Folder, FolderOpen, Plus, Search } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  FileText,
+  Folder,
+  FolderOpen,
+  FolderPlus,
+  Plus,
+  Search,
+} from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import nowted from "../public/logo.png";
@@ -18,9 +31,12 @@ export default function SidebarMenu() {
       <div className="px-5 pt-8 space-y-8">
         <div className="flex items-center justify-between w-full">
           <Image alt="Nowted Logo" src={nowted} width={110} height={40} />
-          <Search className="w-4 h-4 text-white" />
+          <Search className="w-5 h-5 text-white" />
         </div>
-        <Button variant={"secondary"} className="w-full">
+        <Button
+          variant={"secondary"}
+          className="w-full text-white bg-white/5 hover:bg-white/[0.03] shadow-lg"
+        >
           <Plus className="w-5 h-5 mr-2" />
           New Note
         </Button>
@@ -50,7 +66,32 @@ export default function SidebarMenu() {
         </ul>
       </div>
       <div>
-        <p className="px-5 pb-2 text-xs text-white/60">Folders</p>
+        <div className="flex items-center justify-between">
+          <p className="pb-2 pl-5 text-xs text-white/60">Folders</p>
+          {/* <Button
+            variant={"outline"}
+            size={"icon"}
+            className="pb-2 bg-transparent border-none hover:bg-transparent"
+          >
+            <FolderPlus className="w-5 h-5 text-white/40" />
+          </Button> */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  size={"icon"}
+                  className="mb-2 mr-2 bg-transparent border-none hover:bg-white/20"
+                >
+                  <FolderPlus className="w-5 h-5 text-white/40" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent align="start">
+                <p>Please wait, Im building it :)</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <ul className="text-sm">
           {folderList.map((item) => (
             <li
