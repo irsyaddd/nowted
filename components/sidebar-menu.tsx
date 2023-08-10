@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { folderList, moreList, recentNotes } from "@/note";
+import { recentNotes, folderList } from "@/note";
 import { useNoteStore } from "@/zustand/noteStore";
 import {
   Tooltip,
@@ -10,20 +10,41 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
+  Archive,
   FileText,
   Folder,
   FolderOpen,
   FolderPlus,
   Plus,
   Search,
+  Star,
+  Trash,
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import nowted from "../public/logo.png";
+import { FolderProps } from "@/types";
+const moreList: FolderProps[] = [
+  {
+    id: 1,
+    icon: <Star className="w-4 h-4 mr-3" />,
+    title: "Favorite",
+  },
+  {
+    id: 2,
+    icon: <Trash className="w-4 h-4 mr-3" />,
+    title: "Trash",
+  },
+  {
+    id: 3,
+    icon: <Archive className="w-4 h-4 mr-3" />,
+    title: "Archived Notes",
+  },
+];
 
 export default function SidebarMenu() {
   const [category, setCategory] = useState("folder");
-  const { selectNote, selectMenu, selectNoteDetail, dataMenu, data } =
+  const { selectFolder, selectNoteDetail, folderSelected, data } =
     useNoteStore();
   const [currentSelected, setCurrentSelected] = useState<Number | null>(null);
   return (
@@ -45,8 +66,7 @@ export default function SidebarMenu() {
             <li
               onClick={() => {
                 selectNoteDetail(item);
-                selectNote(item.category);
-                selectMenu(item.category, item.id);
+                selectFolder(item.category, item.id);
               }}
               aria-current={index === data.recentSelectedIndex! - 1}
               role="button"
@@ -65,13 +85,6 @@ export default function SidebarMenu() {
       <div>
         <div className="flex items-center justify-between">
           <p className="pb-2 pl-5 text-xs text-white/60">Folders</p>
-          {/* <Button
-            variant={"outline"}
-            size={"icon"}
-            className="pb-2 bg-transparent border-none hover:bg-transparent"
-          >
-            <FolderPlus className="w-5 h-5 text-white/40" />
-          </Button> */}
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -95,21 +108,21 @@ export default function SidebarMenu() {
               onClick={() => {
                 if (category !== "folder") {
                   setCategory("folder");
-                  selectNote(item);
-                  selectMenu(item.title, data.recentSelectedIndex);
+                  selectFolder(item.title);
+                  selectFolder(item.title, data.recentSelectedIndex);
                 } else {
-                  selectNote(item);
-                  selectMenu(item.title, data.recentSelectedIndex);
+                  selectFolder(item.title);
+                  selectFolder(item.title, data.recentSelectedIndex);
                 }
               }}
-              aria-current={item.title === dataMenu}
+              aria-current={item.title === folderSelected}
               key={item.title}
               className={`${
                 category === "folder" &&
                 "[&[aria-current='true']]:bg-white/5 [&[aria-current='true']]:text-white"
               } flex items-center px-5 py-3 transition duration-75 cursor-pointer hover:text-white text-white/60 hover:bg-white/5`}
             >
-              {dataMenu === item.title ? (
+              {item.title === folderSelected ? (
                 <FolderOpen className="w-4 h-4 mr-3" />
               ) : (
                 <Folder className="w-4 h-4 mr-3" />

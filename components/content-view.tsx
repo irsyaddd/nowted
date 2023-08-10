@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useNoteStore } from "@/zustand/noteStore";
-import Tiptap from "./tiptap";
 
 export default function ContentView() {
   const { dataNoteDetail } = useNoteStore();
@@ -77,10 +76,9 @@ export default function ContentView() {
               <p className="underline">{dataNoteDetail.category}</p>
             </div>
           </div>
-          <Tiptap {...dataNoteDetail} />
-          {/* <div className="">
+          <div className="">
             <p>{dataNoteDetail.content}</p>
-          </div> */}
+          </div>
         </>
       ) : (
         <EmptyState />

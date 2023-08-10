@@ -4,7 +4,7 @@ import { useNoteStore } from "@/zustand/noteStore";
 import React from "react";
 
 export default function ContentList() {
-  const { data, selectNoteDetail, selectMenu, selectNote } = useNoteStore();
+  const { data, selectNoteDetail, selectFolder } = useNoteStore();
   return (
     <section className="justify-around w-[20rem] bg-noted-secondary px-5 pt-8">
       <p className="pb-8 text-xl text-white">{data.title}</p>
@@ -15,8 +15,7 @@ export default function ContentList() {
             key={item.id}
             onClick={() => {
               selectNoteDetail(item);
-              selectNote(item.category);
-              selectMenu(item.category, item.id);
+              selectFolder(item.category, item.id);
             }}
             aria-current={item.id === data.recentSelectedIndex}
             className="p-5 space-y-3 text-white bg-white/[.03] [&[aria-current='true']]:bg-white/10 transition duration-150 cursor-pointer"

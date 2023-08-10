@@ -1,14 +1,16 @@
+import React from "react";
+
 export type NoteProps = {
   id: number;
   title: string;
+  status: string;
   content: string;
   createdAt: string;
-  url: string;
   category: string;
 };
 
 export type FolderProps = {
-  icon?: React.ReactNode;
+  id: number;
   title: string;
-  notes: NoteProps[];
+  icon?: React.ReactNode;
 };
