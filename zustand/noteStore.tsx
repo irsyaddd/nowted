@@ -10,14 +10,12 @@ interface NoteState {
     notes: NoteProps[];
     recentSelectedIndex?: number;
   };
-  folderSelected: string;
   dataNoteDetail: NoteProps | undefined;
   selectFolder: (title: string, id?: number) => void;
   selectNoteDetail: (note: NoteProps) => void;
 }
 
 export const useNoteStore = create<NoteState>()((set) => ({
-  folderSelected: folderList[0].title,
   dataNoteDetail: undefined,
   data: {
     title: folderList[0].title,
@@ -26,9 +24,9 @@ export const useNoteStore = create<NoteState>()((set) => ({
   },
   selectFolder: (title, id) =>
     set((state) => ({
-      folderSelected: title,
       data: {
         ...state.data,
+        title,
         notes: notes.filter((item) => item.category === title),
         recentSelectedIndex: id,
       },

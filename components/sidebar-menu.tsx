@@ -44,8 +44,7 @@ const moreList: FolderProps[] = [
 
 export default function SidebarMenu() {
   const [category, setCategory] = useState("folder");
-  const { selectFolder, selectNoteDetail, folderSelected, data } =
-    useNoteStore();
+  const { selectFolder, selectNoteDetail, data } = useNoteStore();
   const [currentSelected, setCurrentSelected] = useState<Number | null>(null);
   return (
     <section className="space-y-8 w-[20rem] bg-noted">
@@ -105,24 +104,15 @@ export default function SidebarMenu() {
         <ul className="text-sm">
           {folderList.map((item) => (
             <li
-              onClick={() => {
-                if (category !== "folder") {
-                  setCategory("folder");
-                  selectFolder(item.title);
-                  selectFolder(item.title, data.recentSelectedIndex);
-                } else {
-                  selectFolder(item.title);
-                  selectFolder(item.title, data.recentSelectedIndex);
-                }
-              }}
-              aria-current={item.title === folderSelected}
+              onClick={() => selectFolder(item.title, data.recentSelectedIndex)}
+              aria-current={item.title === data.title}
               key={item.title}
               className={`${
                 category === "folder" &&
                 "[&[aria-current='true']]:bg-white/5 [&[aria-current='true']]:text-white"
               } flex items-center px-5 py-3 transition duration-75 cursor-pointer hover:text-white text-white/60 hover:bg-white/5`}
             >
-              {item.title === folderSelected ? (
+              {item.title === data.title ? (
                 <FolderOpen className="w-4 h-4 mr-3" />
               ) : (
                 <Folder className="w-4 h-4 mr-3" />
@@ -137,14 +127,7 @@ export default function SidebarMenu() {
         <ul className="text-sm">
           {moreList.map((item, index) => (
             <li
-              onClick={() => {
-                if (category !== "more") {
-                  setCategory("more");
-                  setCurrentSelected(index);
-                } else {
-                  setCurrentSelected(index);
-                }
-              }}
+              onClick={() => selectFolder(item.title, data.recentSelectedIndex)}
               aria-current={index === currentSelected}
               key={item.title}
               className={`${
