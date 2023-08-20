@@ -55,6 +55,9 @@ module.exports = {
           secondary: "#1c1c1c",
         },
       },
+      outlineOffset: {
+        12: "12px",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

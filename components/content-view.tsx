@@ -19,12 +19,12 @@ import {
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useNoteStore } from "@/zustand/noteStore";
-import TiptapEditor from "./tiptap/tiptap-editor";
+import Tiptap from "./tiptapWithContext/tiptap";
 
 export default function ContentView() {
   const { dataNoteDetail } = useNoteStore();
   return (
-    <section className="flex flex-col flex-auto w-20 p-12 space-y-8 text-white bg-noted">
+    <section className="flex flex-col flex-auto w-20 gap-8 p-12 text-white bg-noted">
       {dataNoteDetail ? (
         <>
           <div className="flex justify-between w-full">
@@ -60,7 +60,7 @@ export default function ContentView() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="space-y-4">
+          <div className="flex flex-col gap-4">
             <div className="flex text-sm">
               <div className="flex items-center gap-6 text-white/60">
                 <CalendarDays className="w-4 h-4" />
@@ -77,7 +77,7 @@ export default function ContentView() {
               <p className="underline">{dataNoteDetail.category}</p>
             </div>
           </div>
-          <TiptapEditor content={dataNoteDetail.content} />
+          <Tiptap content={dataNoteDetail.content} />
         </>
       ) : (
         <EmptyState />
