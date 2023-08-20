@@ -1,4 +1,12 @@
 /* Basic editor styles */
+.tiptap p.is-editor-empty:first-child::before {
+  color: #8a8a8a99;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
 .tiptap {
     > * + * {
       margin-top: 0.75em;
@@ -35,13 +43,21 @@
     }
   
     code {
-      background-color: rgba(#616161, 0.1);
-      color: #616161;
+      background-color: #3b3b3b;
+      color: #FFF;
+      padding: 12px;
+      border-radius: 8px;
+      display: block;
+    }
+
+    mark {
+      background-color: rgb(79 70 229);
+      color: white;
     }
   
     pre {
-      background: #0D0D0D;
-      color: #FFF;
+      background: #FFF;
+      color: #000;
       font-family: 'JetBrainsMono', monospace;
       padding: 0.75rem 1rem;
       border-radius: 0.5rem;
