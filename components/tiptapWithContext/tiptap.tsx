@@ -112,7 +112,7 @@ export default function Tiptap({ content }: { content: string }) {
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu> */}
-          <div>
+          <div className="flex gap-1">
             <Button
               variant={"ghost"}
               size={"icon"}
