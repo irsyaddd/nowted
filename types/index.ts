@@ -10,7 +10,7 @@ export type NoteProps = {
 };
 
 export type FolderProps = {
-  id: number;
+  id: string;
   title: string;
   icon?: React.ReactNode;
 };
