@@ -89,19 +89,19 @@ export const notes: NoteProps[] = [
 
 export const folderList: FolderProps[] = [
   {
-    id: 4,
+    id: "4",
     title: "Personal",
   },
   {
-    id: 5,
+    id: "5",
     title: "Travel",
   },
   {
-    id: 6,
+    id: "6",
     title: "Work",
   },
   {
-    id: 7,
+    id: "7",
     title: "Events",
   },
 ];

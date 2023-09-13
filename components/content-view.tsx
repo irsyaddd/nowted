@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EmptyState from "@/components/empty-state";
 import {
   DropdownMenu,
@@ -23,6 +23,15 @@ import Tiptap from "./tiptapWithContext/tiptap";
 
 export default function ContentView() {
   const { dataNoteDetail } = useNoteStore();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
   return (
     <section className="flex flex-col flex-auto w-20 gap-8 p-12 text-white bg-noted">
       {dataNoteDetail ? (

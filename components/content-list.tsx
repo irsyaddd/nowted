@@ -1,10 +1,20 @@
 "use client";
 
 import { useNoteStore } from "@/zustand/noteStore";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function ContentList() {
   const { data, selectNoteDetail, selectFolder } = useNoteStore();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <section className="justify-around w-[20rem] bg-noted-secondary px-5 pt-8">
       <p className="pb-8 text-xl text-white">{data.title}</p>

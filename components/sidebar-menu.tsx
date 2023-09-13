@@ -19,6 +19,8 @@ import {
   Folder,
   FolderOpen,
   FolderPlus,
+  Loader,
+  Loader2,
   Plus,
   Search,
   Star,
@@ -49,11 +51,17 @@ const moreList: FolderProps[] = [
 ];
 
 export default function SidebarMenu() {
-  const { selectFolder, selectNoteDetail, data } = useNoteStore();
+  const {
+    selectFolder,
+    selectNoteDetail,
+    data,
+    getFolder,
+    loading,
+    folderListz,
+    updateFolderList,
+  } = useNoteStore();
   const [creatingFolderMode, setCreatingFolderMode] = useState(false);
-  const [folderListz, setFolderListz] = useState<FolderProps[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
-
+  const [isMounted, setIsMounted] = useState(false);
   const formSchema = z.object({
     foldername: z.string().max(20, {
       message: "Too Long",
@@ -67,56 +75,122 @@ export default function SidebarMenu() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     const folderObj = {
       id: generateRandomId(),
       title: values.foldername === "" ? "New Folder" : values.foldername,
     };
     const updatedDataList = [...folderListz, folderObj];
-    setFolderListz(updatedDataList);
+    updateFolderList(updatedDataList);
     localStorage.setItem("folderList", JSON.stringify(updatedDataList));
     form.reset();
-    setCreatingFolderMode(false);
+    createFolder(false);
   }
-
-  useEffect(() => {
-    // Load data from local storage when the component mounts
-    const savedDataList = JSON.parse(localStorage.getItem("folderList")!) || [];
-    setFolderListz(savedDataList);
-  }, []);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setCreatingFolderMode(false);
+        createFolder(false);
         form.reset();
       }
     },
     [form]
   );
 
-  const createFolder = useCallback((event: KeyboardEvent) => {
+  const createFolderByKey = useCallback((event: KeyboardEvent) => {
     if ((event.metaKey || event.ctrlKey) && event.key === "/") {
-      // Your code to handle the shortcut goes here
       event.preventDefault();
-      setCreatingFolderMode(true);
+      createFolder(true);
     }
   }, []);
 
-  const x = () => {
-    setCreatingFolderMode(true);
+  const createFolder = (status: boolean) => {
+    setCreatingFolderMode(status);
   };
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keydown", createFolder);
+    document.addEventListener("keydown", createFolderByKey);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keydown", createFolder);
+      document.removeEventListener("keydown", createFolderByKey);
     };
-  }, [handleKeyDown, createFolder]);
+  }, [handleKeyDown, createFolderByKey]);
+
+  const renderFolder = () => {
+    let folder;
+    if (!loading) {
+      if (folderListz.length > 0) {
+        folder = folderListz.map((item) => (
+          <li
+            onClick={() => selectFolder(item.title, data.recentSelectedIndex)}
+            aria-current={item.title === data.title}
+            key={item.title}
+            className={
+              "[&[aria-current='true']]:bg-white/5 [&[aria-current='true']]:text-white flex items-center px-5 py-3 transition duration-75 cursor-pointer hover:text-white  hover:bg-white/5"
+            }
+          >
+            {item.title === data.title ? (
+              <FolderOpen className="w-4 h-4 mr-3 " />
+            ) : (
+              <Folder className="w-4 h-4 mr-3" />
+            )}
+            {item.title}
+          </li>
+        ));
+      } else {
+        folder = creatingFolderMode ? null : (
+          <div className="px-5">
+            <div className="flex flex-col items-center justify-center w-full h-48 text-center bg-transparent">
+              <FolderPlus
+                className="w-10 h-10 pb-2 text-xs text-white"
+                strokeWidth={1}
+              />
+              <p className="text-lg font-semibold text-white">
+                Create a folder
+              </p>
+              <div className="text-xs leading-6">
+                Organize your note into separate folder
+                <div className="flex items-center justify-center gap-2 pt-4">
+                  <div>
+                    <span className="p-1 rounded-sm bg-white/10">
+                      ⌘ Commandd
+                    </span>{" "}
+                    <span className="p-1 rounded-sm bg-white/10">/</span>
+                  </div>
+                  or
+                  <div>
+                    <span className="p-1 rounded-sm bg-white/10">Ctrl</span>{" "}
+                    <span className="p-1 rounded-sm bg-white/10">/</span>
+                  </div>
+                </div>
+                to create a folder
+              </div>
+            </div>
+          </div>
+        );
+      }
+    } else {
+      folder = (
+        <div className="px-5">
+          <div className="flex flex-col items-center justify-center w-full h-48 text-center bg-transparent">
+            <Loader2 className="w-8 h-8 animate-spin" />
+          </div>
+        </div>
+      );
+    }
+
+    return folder;
+  };
+
+  useEffect(() => {
+    setIsMounted(true);
+    getFolder();
+  }, [getFolder]);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <section className="space-y-8 w-[20rem] bg-noted text-white/60">
@@ -160,7 +234,7 @@ export default function SidebarMenu() {
           <Button
             variant={"outline"}
             size={"icon"}
-            onClick={() => x()}
+            onClick={() => createFolder(true)}
             className="mb-2 mr-2 bg-transparent border-none hover:bg-white/20"
           >
             <FolderPlus className="w-5 h-5 text-white/40" />
@@ -199,44 +273,7 @@ export default function SidebarMenu() {
             </Form>
           </div>
         )}
-        <ul className="text-sm">
-          {folderListz.length > 0 ? (
-            folderListz.map((item) => (
-              <li
-                onClick={() =>
-                  selectFolder(item.title, data.recentSelectedIndex)
-                }
-                aria-current={item.title === data.title}
-                key={item.title}
-                className={
-                  "[&[aria-current='true']]:bg-white/5 [&[aria-current='true']]:text-white flex items-center px-5 py-3 transition duration-75 cursor-pointer hover:text-white  hover:bg-white/5"
-                }
-              >
-                {item.title === data.title ? (
-                  <FolderOpen className="w-4 h-4 mr-3 " />
-                ) : (
-                  <Folder className="w-4 h-4 mr-3" />
-                )}
-                {item.title}
-              </li>
-            ))
-          ) : (
-            <div className="px-5">
-              <div className="flex flex-col items-center justify-center w-full h-48 text-center bg-transparent">
-                <FolderPlus
-                  className="w-10 h-10 pb-2 text-xs text-white"
-                  strokeWidth={1}
-                />
-                <p className="text-lg font-semibold text-white">
-                  Create a folder
-                </p>
-                <p className="w-48 text-xs leading-5 text-white/60">
-                  Organize your file by storing them in separate folder
-                </p>
-              </div>
-            </div>
-          )}
-        </ul>
+        <ul className="text-sm">{renderFolder()}</ul>
       </div>
       <div>
         <p className="px-5 pb-2 text-xs ">More</p>
