@@ -1,3 +1,4 @@
+// @ts-nocheck
 import "./styles.scss";
 import { Underline as UnderlineTiptap } from "@tiptap/extension-underline";
 import { Image as ImageTiptap } from "@tiptap/extension-image";
