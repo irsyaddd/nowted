@@ -220,8 +220,6 @@ export default function Tiptap({ content }: { content: string }) {
       extensions={extensions}
       content={content}
       editorProps={customEditorProps}
-    >
-      {}
-    </EditorProvider>
+    />
   );
 }
