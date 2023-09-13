@@ -1,4 +1,3 @@
-// @ts-nocheck
 import "./styles.scss";
 import { Underline as UnderlineTiptap } from "@tiptap/extension-underline";
 import { Image as ImageTiptap } from "@tiptap/extension-image";
@@ -221,6 +220,8 @@ export default function Tiptap({ content }: { content: string }) {
       extensions={extensions}
       content={content}
       editorProps={customEditorProps}
-    />
+    >
+      {}
+    </EditorProvider>
   );
 }
