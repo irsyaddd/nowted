@@ -24,6 +24,7 @@ import {
   Search,
   Star,
   Trash,
+  XSquare,
 } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
@@ -105,21 +106,16 @@ export default function SidebarMenu() {
     },
     [setCreateFolderMode]
   );
-  const handleClick = useCallback(() => {
-    setCreateFolderMode(false);
-  }, [setCreateFolderMode]);
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keydown", createFolderByKey);
-    window.addEventListener("click", handleClick);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keydown", createFolderByKey);
-      window.removeEventListener("click", handleClick);
     };
-  }, [handleKeyDown, createFolderByKey, handleClick]);
+  }, [handleKeyDown, createFolderByKey]);
 
   const renderFolder = () => {
     let folder;
@@ -203,7 +199,10 @@ export default function SidebarMenu() {
           <Image alt="Nowted Logo" src={nowted} width={110} height={40} />
           <Search className="w-5 h-5 text-white" />
         </div>
-        <Button variant={"secondary"} className="w-full shadow-lg">
+        <Button
+          variant={"secondary"}
+          className="w-full text-white bg-indigo-600 shadow-lg hover:bg-indigo-500"
+        >
           <Plus className="w-5 h-5 mr-2" />
           New Note
         </Button>
@@ -234,17 +233,19 @@ export default function SidebarMenu() {
       <div>
         <div className="flex items-center justify-between">
           <p className="pb-2 pl-5 text-xs ">Folders</p>
-
           <Button
             variant={"outline"}
             size={"icon"}
-            onClick={(event) => {
-              event.stopPropagation();
-              setCreateFolderMode(true);
+            onClick={(e) => {
+              setCreateFolderMode(!createFolderMode);
             }}
             className="mb-2 mr-2 bg-transparent border-none hover:bg-white/20"
           >
-            <FolderPlus className="w-5 h-5 text-white/40" />
+            {!createFolderMode ? (
+              <FolderPlus className="w-5 h-5 text-white/40" />
+            ) : (
+              <XSquare className="w-5 h-5 text-white/40" />
+            )}
           </Button>
         </div>
         {createFolderMode && (

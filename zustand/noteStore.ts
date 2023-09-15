@@ -33,8 +33,8 @@ export const useNoteStore = create<NoteState>()((set) => ({
   dataNoteDetail: undefined,
   createFolderMode: false,
   data: {
-    title: folderList[0].title,
-    notes: notes.filter((item) => item.category === folderList[0].title),
+    title: "",
+    notes: [],
     recentSelectedIndex: undefined,
   },
   loading: false,
@@ -55,7 +55,17 @@ export const useNoteStore = create<NoteState>()((set) => ({
     const savedDataList = localStorage.getItem("folderList");
     if (savedDataList !== null) {
       const parsedDataList = JSON.parse(savedDataList);
-      set({ folderListz: parsedDataList });
+      set((state) => ({
+        data: {
+          ...state.data,
+          title: parsedDataList[0].title,
+          notes: notes.filter(
+            (item) => item.category === parsedDataList[0].title
+          ),
+          recentSelectedIndex: undefined,
+        },
+      })),
+        set({ folderListz: parsedDataList });
     } else {
       set({ folderListz: [] });
     }

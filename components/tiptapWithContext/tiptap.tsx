@@ -1,3 +1,5 @@
+"use client";
+
 import "./styles.scss";
 import { Underline as UnderlineTiptap } from "@tiptap/extension-underline";
 import { Image as ImageTiptap } from "@tiptap/extension-image";
@@ -5,7 +7,16 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Highlight from "@tiptap/extension-highlight";
 import { EditorProvider, useCurrentEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Bold,
   ChevronDown,
@@ -30,7 +41,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ElementTagText } from "@/lib/utils";
 
-export default function Tiptap({ content }: { content: string }) {
+export default function Tiptap({ content }: { content?: string }) {
+  const [isMounted, setIsMounted] = useState(false);
   const [position, setPosition] = useState("bottom");
   const [size, setSize] = useState("16");
   const MenuBar = () => {
@@ -54,10 +66,7 @@ export default function Tiptap({ content }: { content: string }) {
             <DropdownMenuContent className="text-white border bg-noted border-white/10 w-36 drop-shadow-lg">
               <DropdownMenuLabel>Element Tag</DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-white/10" />
-              <DropdownMenuRadioGroup
-                value={position}
-                onValueChange={setPosition}
-              >
+              <DropdownMenuRadioGroup>
                 <DropdownMenuRadioItem
                   value="Heading 1"
                   onClick={() =>
@@ -214,6 +223,14 @@ export default function Tiptap({ content }: { content: string }) {
         "focus:outline outline-offset-12 outline-1 outline-indigo-600 mt-2",
     },
   };
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
   return (
     <EditorProvider
       slotBefore={<MenuBar />}
