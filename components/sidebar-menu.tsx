@@ -19,7 +19,6 @@ import {
   Folder,
   FolderOpen,
   FolderPlus,
-  Loader,
   Loader2,
   Plus,
   Search,
@@ -27,7 +26,7 @@ import {
   Trash,
 } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import nowted from "../public/logo.png";
@@ -59,8 +58,9 @@ export default function SidebarMenu() {
     loading,
     folderListz,
     updateFolderList,
+    createFolderMode,
+    setCreateFolderMode,
   } = useNoteStore();
-  const [creatingFolderMode, setCreatingFolderMode] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const formSchema = z.object({
     foldername: z.string().max(20, {
@@ -83,39 +83,43 @@ export default function SidebarMenu() {
     updateFolderList(updatedDataList);
     localStorage.setItem("folderList", JSON.stringify(updatedDataList));
     form.reset();
-    createFolder(false);
+    setCreateFolderMode(false);
   }
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        createFolder(false);
+        setCreateFolderMode(false);
         form.reset();
       }
     },
-    [form]
+    [form, setCreateFolderMode]
   );
 
-  const createFolderByKey = useCallback((event: KeyboardEvent) => {
-    if ((event.metaKey || event.ctrlKey) && event.key === "/") {
-      event.preventDefault();
-      createFolder(true);
-    }
-  }, []);
-
-  const createFolder = (status: boolean) => {
-    setCreatingFolderMode(status);
-  };
+  const createFolderByKey = useCallback(
+    (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "/") {
+        event.preventDefault();
+        setCreateFolderMode(true);
+      }
+    },
+    [setCreateFolderMode]
+  );
+  const handleClick = useCallback(() => {
+    setCreateFolderMode(false);
+  }, [setCreateFolderMode]);
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keydown", createFolderByKey);
+    window.addEventListener("click", handleClick);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keydown", createFolderByKey);
+      window.removeEventListener("click", handleClick);
     };
-  }, [handleKeyDown, createFolderByKey]);
+  }, [handleKeyDown, createFolderByKey, handleClick]);
 
   const renderFolder = () => {
     let folder;
@@ -139,7 +143,7 @@ export default function SidebarMenu() {
           </li>
         ));
       } else {
-        folder = creatingFolderMode ? null : (
+        folder = createFolderMode ? null : (
           <div className="px-5">
             <div className="flex flex-col items-center justify-center w-full h-48 text-center bg-transparent">
               <FolderPlus
@@ -234,13 +238,16 @@ export default function SidebarMenu() {
           <Button
             variant={"outline"}
             size={"icon"}
-            onClick={() => createFolder(true)}
+            onClick={(event) => {
+              event.stopPropagation();
+              setCreateFolderMode(true);
+            }}
             className="mb-2 mr-2 bg-transparent border-none hover:bg-white/20"
           >
             <FolderPlus className="w-5 h-5 text-white/40" />
           </Button>
         </div>
-        {creatingFolderMode && (
+        {createFolderMode && (
           <div className="flex items-center px-5">
             <FolderOpen className="w-4 h-4 mr-3 text-white" />
             <Form {...form}>

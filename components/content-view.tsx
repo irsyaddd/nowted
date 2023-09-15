@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import EmptyState from "@/components/empty-state";
 import {
   DropdownMenu,
@@ -22,7 +22,7 @@ import { useNoteStore } from "@/zustand/noteStore";
 import Tiptap from "./tiptapWithContext/tiptap";
 
 export default function ContentView() {
-  const { dataNoteDetail } = useNoteStore();
+  const { dataNoteDetail, setCreateFolderMode } = useNoteStore();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -33,7 +33,10 @@ export default function ContentView() {
     return null;
   }
   return (
-    <section className="flex flex-col flex-auto w-20 gap-8 p-12 text-white bg-noted">
+    <section
+      id="content-view"
+      className="flex flex-col flex-auto w-20 gap-8 p-12 text-white bg-noted"
+    >
       {dataNoteDetail ? (
         <>
           <div className="flex justify-between w-full">

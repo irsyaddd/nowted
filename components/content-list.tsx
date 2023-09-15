@@ -16,7 +16,10 @@ export default function ContentList() {
   }
 
   return (
-    <section className="justify-around w-[20rem] bg-noted-secondary px-5 pt-8">
+    <section
+      id="content-list"
+      className="justify-around w-[20rem] bg-noted-secondary px-5 pt-8"
+    >
       <p className="pb-8 text-xl text-white">{data.title}</p>
       <ul className="space-y-5">
         {data.notes.map((item) => (

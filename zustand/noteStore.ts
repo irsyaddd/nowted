@@ -19,8 +19,10 @@ interface NoteState {
   };
   folderListz: FolderProps[];
   loading: boolean;
+  createFolderMode: boolean;
   dataNoteDetail: NoteProps | undefined;
   setLoading: (loading: boolean) => void;
+  setCreateFolderMode: (isCreateFolderMode: boolean) => void;
   selectFolder: (title: string, id?: number) => void;
   selectNoteDetail: (note: NoteProps) => void;
   getFolder: () => void;
@@ -29,6 +31,7 @@ interface NoteState {
 
 export const useNoteStore = create<NoteState>()((set) => ({
   dataNoteDetail: undefined,
+  createFolderMode: false,
   data: {
     title: folderList[0].title,
     notes: notes.filter((item) => item.category === folderList[0].title),
@@ -62,4 +65,5 @@ export const useNoteStore = create<NoteState>()((set) => ({
   updateFolderList: (updatedDataList: FolderProps[]) => {
     set({ folderListz: updatedDataList });
   },
+  setCreateFolderMode: (status) => set({ createFolderMode: status }),
 }));
