@@ -17,21 +17,27 @@ interface NoteState {
     notes: NoteProps[];
     recentSelectedIndex?: number;
   };
+  content: string;
   folderListz: FolderProps[];
   loading: boolean;
   createFolderMode: boolean;
+  createNoteMode: boolean;
   dataNoteDetail: NoteProps | undefined;
   setLoading: (loading: boolean) => void;
   setCreateFolderMode: (isCreateFolderMode: boolean) => void;
+  setCreateNoteMode: (isCreateNodeMode: boolean) => void;
   selectFolder: (title: string, id?: number) => void;
   selectNoteDetail: (note: NoteProps) => void;
   getFolder: () => void;
+  setContent: (content: string) => void;
   updateFolderList: (folder: FolderProps[]) => void;
 }
 
 export const useNoteStore = create<NoteState>()((set) => ({
   dataNoteDetail: undefined,
   createFolderMode: false,
+  createNoteMode: false,
+  content: "",
   data: {
     title: "",
     notes: [],
@@ -39,6 +45,8 @@ export const useNoteStore = create<NoteState>()((set) => ({
   },
   loading: false,
   folderListz: [],
+  setContent: (content) => set({ content }),
+  setCreateNoteMode: (status) => set({ createNoteMode: status }),
   setLoading: (loading) => set({ loading }),
   selectFolder: (title, id) =>
     set((state) => ({

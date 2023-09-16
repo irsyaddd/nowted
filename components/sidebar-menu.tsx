@@ -61,6 +61,7 @@ export default function SidebarMenu() {
     updateFolderList,
     createFolderMode,
     setCreateFolderMode,
+    setCreateNoteMode,
   } = useNoteStore();
   const [isMounted, setIsMounted] = useState(false);
   const formSchema = z.object({
@@ -90,11 +91,12 @@ export default function SidebarMenu() {
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        setCreateNoteMode(false);
         setCreateFolderMode(false);
         form.reset();
       }
     },
-    [form, setCreateFolderMode]
+    [form, setCreateFolderMode, setCreateNoteMode]
   );
 
   const createFolderByKey = useCallback(
@@ -107,15 +109,28 @@ export default function SidebarMenu() {
     [setCreateFolderMode]
   );
 
+  const createNoteByKey = useCallback(
+    (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "b") {
+        event.preventDefault();
+        selectFolder("", undefined);
+        setCreateNoteMode(true);
+      }
+    },
+    [setCreateNoteMode, selectFolder]
+  );
+
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keydown", createFolderByKey);
+    document.addEventListener("keydown", createNoteByKey);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keydown", createFolderByKey);
+      document.removeEventListener("keydown", createNoteByKey);
     };
-  }, [handleKeyDown, createFolderByKey]);
+  }, [handleKeyDown, createFolderByKey, createNoteByKey]);
 
   const renderFolder = () => {
     let folder;
@@ -202,6 +217,7 @@ export default function SidebarMenu() {
         <Button
           variant={"secondary"}
           className="w-full text-white bg-indigo-600 shadow-lg hover:bg-indigo-500"
+          onClick={() => setCreateNoteMode(true)}
         >
           <Plus className="w-5 h-5 mr-2" />
           New Note
@@ -215,6 +231,7 @@ export default function SidebarMenu() {
               onClick={() => {
                 selectNoteDetail(item);
                 selectFolder(item.category, item.id);
+                setCreateNoteMode(false);
               }}
               aria-current={index === data.recentSelectedIndex! - 1}
               role="button"
@@ -249,7 +266,7 @@ export default function SidebarMenu() {
           </Button>
         </div>
         {createFolderMode && (
-          <div className="flex items-center px-5">
+          <div className="flex items-center px-5 py-3">
             <FolderOpen className="w-4 h-4 mr-3 text-white" />
             <Form {...form}>
               <form
@@ -268,6 +285,7 @@ export default function SidebarMenu() {
                           className="h-10 text-white bg-transparent"
                           {...field}
                           autoFocus
+                          autoComplete="off"
                         />
                       </FormControl>
                       <FormMessage />

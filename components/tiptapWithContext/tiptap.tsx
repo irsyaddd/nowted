@@ -1,35 +1,5 @@
 "use client";
 
-import "./styles.scss";
-import { Underline as UnderlineTiptap } from "@tiptap/extension-underline";
-import { Image as ImageTiptap } from "@tiptap/extension-image";
-import Placeholder from "@tiptap/extension-placeholder";
-import Highlight from "@tiptap/extension-highlight";
-import { EditorProvider, useCurrentEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import { MouseEventHandler, useEffect, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Bold,
-  ChevronDown,
-  Eraser,
-  Highlighter,
-  Image,
-  Italic,
-  Link,
-  SquareCode,
-  Table,
-  Underline,
-} from "lucide-react";
-import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,10 +9,32 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { debounce } from "lodash";
 import { ElementTagText } from "@/lib/utils";
+import Highlight from "@tiptap/extension-highlight";
+import { Image as ImageTiptap } from "@tiptap/extension-image";
+import Placeholder from "@tiptap/extension-placeholder";
+import { Underline as UnderlineTiptap } from "@tiptap/extension-underline";
+import { EditorProvider, useCurrentEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import {
+  Bold,
+  ChevronDown,
+  Highlighter,
+  Image,
+  Italic,
+  Link,
+  SquareCode,
+  Underline,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import "./styles.scss";
+import { useNoteStore } from "@/zustand/noteStore";
 
 export default function Tiptap({ content }: { content?: string }) {
   const [isMounted, setIsMounted] = useState(false);
+  const { setContent } = useNoteStore();
   const [position, setPosition] = useState("bottom");
   const [size, setSize] = useState("16");
   const MenuBar = () => {
@@ -236,6 +228,10 @@ export default function Tiptap({ content }: { content?: string }) {
       slotBefore={<MenuBar />}
       extensions={extensions}
       content={content}
+      onUpdate={debounce(({ editor: e }) => {
+        const content = e?.getHTML();
+        setContent(content);
+      }, 500)}
       editorProps={customEditorProps}
     >
       {}

@@ -4,7 +4,13 @@ import { useNoteStore } from "@/zustand/noteStore";
 import React, { useEffect, useState } from "react";
 
 export default function ContentList() {
-  const { data, selectNoteDetail, selectFolder } = useNoteStore();
+  const {
+    data,
+    selectNoteDetail,
+    selectFolder,
+    setCreateFolderMode,
+    setCreateNoteMode,
+  } = useNoteStore();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -21,7 +27,7 @@ export default function ContentList() {
       className="justify-around w-[20rem] bg-noted-secondary px-5 pt-8"
     >
       <p className="pb-8 text-xl text-white">{data.title}</p>
-      <ul className="space-y-5">
+      <ul className="relative z-20 space-y-28">
         {data.notes.map((item) => (
           <li
             role="button"
@@ -29,9 +35,11 @@ export default function ContentList() {
             onClick={() => {
               selectNoteDetail(item);
               selectFolder(item.category, item.id);
+              setCreateFolderMode(false);
+              setCreateNoteMode(false);
             }}
             aria-current={item.id === data.recentSelectedIndex}
-            className="p-5 space-y-3 text-white bg-white/[.03] [&[aria-current='true']]:bg-white/10 transition duration-150 cursor-pointer"
+            className=" z-20 absolute p-5 space-y-3 text-white bg-white/[.03] [&[aria-current='true']]:bg-white/10 transition duration-150 cursor-pointer"
           >
             <p>{item.title}</p>
             <div className="flex gap-3 text-sm">

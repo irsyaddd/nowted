@@ -33,3 +33,80 @@ export function generateRandomId() {
 
   return randomId;
 }
+
+export const getDay = (index: number) => {
+  let day;
+  switch (index) {
+    case 0:
+      day = "Sunday";
+      break;
+    case 1:
+      day = "Monday";
+      break;
+    case 2:
+      day = "Tuesday";
+      break;
+    case 3:
+      day = "Wednesday";
+      break;
+    case 4:
+      day = "Thursday";
+      break;
+    case 5:
+      day = "Friday";
+      break;
+    case 6:
+      day = "Saturday";
+      break;
+    default:
+      break;
+  }
+
+  return day;
+};
+
+export const getMonth = (index: number) => {
+  let day;
+  switch (index) {
+    case 1:
+      day = "January";
+      break;
+    case 2:
+      day = "February";
+      break;
+    case 3:
+      day = "March";
+      break;
+    case 4:
+      day = "April";
+      break;
+    case 5:
+      day = "May";
+      break;
+    case 6:
+      day = "June";
+      break;
+    case 7:
+      day = "July";
+      break;
+    case 8:
+      day = "August";
+      break;
+    case 9:
+      day = "September";
+      break;
+    case 10:
+      day = "October";
+      break;
+    case 11:
+      day = "November";
+      break;
+    case 12:
+      day = "December";
+      break;
+    default:
+      break;
+  }
+
+  return day;
+};

@@ -11,7 +11,7 @@ export default function Home() {
     <main className="flex min-h-screen">
       {createFolderMode && (
         <div
-          className="absolute z-10 w-full h-screen bg-transparent"
+          className="absolute z-10 w-full h-screen bg-transparent ml-[20rem]"
           onClick={() => setCreateFolderMode(false)}
         />
       )}
