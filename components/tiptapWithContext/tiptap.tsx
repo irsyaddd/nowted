@@ -1,5 +1,27 @@
 "use client";
 
+import { useNoteStore } from "@/zustand/noteStore";
+import "./styles.scss";
+
+import { ElementTagText } from "@/lib/utils";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Highlight from "@tiptap/extension-highlight";
+import Placeholder from "@tiptap/extension-placeholder";
+import { Underline as UnderlineTiptap } from "@tiptap/extension-underline";
+import { Image as ImageTiptap } from "@tiptap/extension-image";
+import {
+  Bold,
+  ChevronDown,
+  Highlighter,
+  Italic,
+  Link,
+  SquareCode,
+  Underline,
+  Image,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,37 +30,51 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import { debounce } from "lodash";
-import { ElementTagText } from "@/lib/utils";
-import Highlight from "@tiptap/extension-highlight";
-import { Image as ImageTiptap } from "@tiptap/extension-image";
-import Placeholder from "@tiptap/extension-placeholder";
-import { Underline as UnderlineTiptap } from "@tiptap/extension-underline";
-import { EditorProvider, useCurrentEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import {
-  Bold,
-  ChevronDown,
-  Highlighter,
-  Image,
-  Italic,
-  Link,
-  SquareCode,
-  Underline,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import "./styles.scss";
-import { useNoteStore } from "@/zustand/noteStore";
 
 export default function Tiptap({ content }: { content?: string }) {
-  const [isMounted, setIsMounted] = useState(false);
-  const { setContent } = useNoteStore();
-  const [position, setPosition] = useState("bottom");
-  const [size, setSize] = useState("16");
+  const { editNoteMode, setContent, createNoteMode } = useNoteStore();
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+
+  const extensions = [
+    StarterKit.configure({
+      bulletList: {
+        keepMarks: true,
+        keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+      },
+      orderedList: {
+        keepMarks: true,
+        keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+      },
+    }),
+    Placeholder.configure({
+      placeholder: `Type anything you want ...`,
+    }),
+    Highlight,
+    UnderlineTiptap,
+    ImageTiptap,
+  ];
+
+  const customEditorProps = {
+    attributes: {
+      class:
+        "focus:outline outline-offset-12 outline-1 outline-indigo-600 mt-2",
+    },
+  };
+
+  const editor = useEditor({
+    content,
+    extensions,
+    editable: editNoteMode,
+    editorProps: customEditorProps,
+    onUpdate: debounce(({ editor: e }) => {
+      const content = e?.getHTML();
+      setContent(content);
+    }, 500),
+  });
+
   const MenuBar = () => {
-    const { editor } = useCurrentEditor();
     if (!editor) {
       return null;
     }
@@ -190,51 +226,23 @@ export default function Tiptap({ content }: { content?: string }) {
     );
   };
 
-  const extensions = [
-    StarterKit.configure({
-      bulletList: {
-        keepMarks: true,
-        keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-      },
-      orderedList: {
-        keepMarks: true,
-        keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-      },
-    }),
-    Placeholder.configure({
-      placeholder: `Type anything you want ...`,
-    }),
-    Highlight,
-    UnderlineTiptap,
-    ImageTiptap,
-  ];
-
-  const customEditorProps = {
-    attributes: {
-      class:
-        "focus:outline outline-offset-12 outline-1 outline-indigo-600 mt-2",
-    },
-  };
-
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+    if (!editor) {
+      return undefined;
+    }
+    createNoteMode
+      ? editor.setEditable(createNoteMode)
+      : editor.setEditable(editNoteMode);
+  }, [editor, editNoteMode, createNoteMode]);
 
-  if (!isMounted) {
+  if (!editor && !isMounted) {
     return null;
   }
   return (
-    <EditorProvider
-      slotBefore={<MenuBar />}
-      extensions={extensions}
-      content={content}
-      onUpdate={debounce(({ editor: e }) => {
-        const content = e?.getHTML();
-        setContent(content);
-      }, 500)}
-      editorProps={customEditorProps}
-    >
-      {}
-    </EditorProvider>
+    <>
+      <MenuBar />
+      <EditorContent editor={editor} />
+    </>
   );
 }

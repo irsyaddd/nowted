@@ -1,11 +1,11 @@
 import React from "react";
 
 export type NoteProps = {
-  id: number;
+  id: string;
   title: string;
   status: string;
   content: string;
-  createdAt: string;
+  createdAt: Date;
   category: string;
 };
 

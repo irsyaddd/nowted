@@ -20,6 +20,7 @@ import {
   FolderOpen,
   FolderPlus,
   Loader2,
+  PenSquare,
   Plus,
   Search,
   Star,
@@ -56,8 +57,10 @@ export default function SidebarMenu() {
     selectNoteDetail,
     data,
     getFolder,
+    getNote,
     loading,
     folderListz,
+    noteListz,
     updateFolderList,
     createFolderMode,
     setCreateFolderMode,
@@ -111,7 +114,7 @@ export default function SidebarMenu() {
 
   const createNoteByKey = useCallback(
     (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key === "b") {
+      if ((event.metaKey || event.ctrlKey) && event.key === ".") {
         event.preventDefault();
         selectFolder("", undefined);
         setCreateNoteMode(true);
@@ -131,6 +134,71 @@ export default function SidebarMenu() {
       document.removeEventListener("keydown", createNoteByKey);
     };
   }, [handleKeyDown, createFolderByKey, createNoteByKey]);
+
+  const renderNote = () => {
+    let note;
+    if (!loading) {
+      if (noteListz.length > 0) {
+        note = noteListz.map((item, index) => (
+          <li
+            onClick={() => {
+              selectNoteDetail(item);
+              selectFolder(item.category, item.id);
+              setCreateNoteMode(false);
+            }}
+            aria-current={index.toString() === data.recentSelectedIndex!}
+            role="button"
+            key={item.id}
+            className={
+              "[&[aria-current='true']]:bg-indigo-600 [&[aria-current='true']]:text-white flex items-center px-5 py-3 transition duration-75 cursor-pointer hover:text-white  hover:bg-white/5"
+            }
+          >
+            <FileText className="w-4 h-4 mr-3" />
+            {item.title}
+          </li>
+        ));
+      } else {
+        note = (
+          <div className="px-5">
+            <div className="flex flex-col items-center justify-center w-full h-48 text-center bg-transparent">
+              <PenSquare
+                className="w-10 h-10 pb-2 text-xs text-white"
+                strokeWidth={1}
+              />
+              <p className="text-lg font-semibold text-white">Create a note</p>
+              <div className="text-xs leading-6">
+                Your recent note will appear here
+                <div className="flex items-center justify-center gap-2 pt-4">
+                  <div>
+                    <span className="p-1 rounded-sm bg-white/10">
+                      ⌘ Command
+                    </span>{" "}
+                    <span className="p-1 rounded-sm bg-white/10">.</span>
+                  </div>
+                  or
+                  <div>
+                    <span className="p-1 rounded-sm bg-white/10">Ctrl</span>{" "}
+                    <span className="p-1 rounded-sm bg-white/10">.</span>
+                  </div>
+                </div>
+                to create a note
+              </div>
+            </div>
+          </div>
+        );
+      }
+    } else {
+      note = (
+        <div className="px-5">
+          <div className="flex flex-col items-center justify-center w-full h-48 text-center bg-transparent">
+            <Loader2 className="w-8 h-8 animate-spin" />
+          </div>
+        </div>
+      );
+    }
+
+    return note;
+  };
 
   const renderFolder = () => {
     let folder;
@@ -169,7 +237,7 @@ export default function SidebarMenu() {
                 <div className="flex items-center justify-center gap-2 pt-4">
                   <div>
                     <span className="p-1 rounded-sm bg-white/10">
-                      ⌘ Commandd
+                      ⌘ Command
                     </span>{" "}
                     <span className="p-1 rounded-sm bg-white/10">/</span>
                   </div>
@@ -201,7 +269,8 @@ export default function SidebarMenu() {
   useEffect(() => {
     setIsMounted(true);
     getFolder();
-  }, [getFolder]);
+    getNote();
+  }, [getFolder, getNote]);
 
   if (!isMounted) {
     return null;
@@ -225,27 +294,7 @@ export default function SidebarMenu() {
       </div>
       <div>
         <p className="px-5 pb-2 text-xs ">Recents</p>
-        <ul className="text-sm">
-          {recentNotes.map((item, index) => (
-            <li
-              onClick={() => {
-                selectNoteDetail(item);
-                selectFolder(item.category, item.id);
-                setCreateNoteMode(false);
-              }}
-              aria-current={index === data.recentSelectedIndex! - 1}
-              role="button"
-              key={item.id}
-              className={
-                "[&[aria-current='true']]:bg-indigo-600 [&[aria-current='true']]:text-white flex items-center px-5 py-3 transition duration-75 cursor-pointer hover:text-white  hover:bg-white/5"
-              }
-            >
-              <FileText className="w-4 h-4 mr-3" />
-
-              {item.title}
-            </li>
-          ))}
-        </ul>
+        <ul className="text-sm">{renderNote()}</ul>
       </div>
       <div>
         <div className="flex items-center justify-between">
